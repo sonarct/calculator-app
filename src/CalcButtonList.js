@@ -11,7 +11,7 @@ class CalcButtonList extends Component {
       ['D', 0, 'C'],
       ['+', '-', '('],
       ['*', '/', ')'],
-      ['=']
+      ['=', '.']
     ]
 
     let i = 0
