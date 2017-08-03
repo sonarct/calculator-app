@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Grid, Row, Col, Well} from 'react-bootstrap'
 import CalcInput from './CalcInput'
 import CalcButtonList from './CalcButtonList'
+import calculate from './logic'
 
 class Calculator extends Component {
   constructor (props) {
@@ -21,37 +22,8 @@ class Calculator extends Component {
 
   validateExpression () {
     const expr = this.state.expression.toString()
-    let bracketsCount = 0
-
-    // Check brackets
-    for (let i in expr) {
-      let symbol = expr[i]
-
-      if (symbol === '(') {
-        bracketsCount++
-      } else if (symbol === ')') {
-        bracketsCount--
-      }
-
-      if (bracketsCount < 0) {
-        return this.setState({
-          isValid: false,
-          answer: 'Неправильно расставлены скобки'
-        })
-      }
-    }
-
-    if (bracketsCount > 0) {
-      return this.setState({
-        isValid: false,
-        answer: 'Неодинаковое количество скобок'
-      })
-    }
-
-    this.setState({
-      isValid: true,
-      answer: 'ok'
-    })
+    let result = calculate(expr)
+    this.setState({...result})
   }
 
   handleButtonClick (e) {
