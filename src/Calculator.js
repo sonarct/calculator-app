@@ -9,15 +9,49 @@ class Calculator extends Component {
 
     this.handleButtonClick = this.handleButtonClick.bind(this)
     this.handleInputText = this.handleInputText.bind(this)
+    this.testInput = this.testInput.bind(this)
+    this.testInput2 = this.testInput2.bind(this)
 
     this.state = {
       expression: '',
-      answer: ''
+      answer: '',
+      isValid: false
     }
   }
 
   validateExpression () {
+    const expr = this.state.expression.toString()
+    let bracketsCount = 0
 
+    // Check brackets
+    for (let i in expr) {
+      let symbol = expr[i]
+
+      if (symbol === '(') {
+        bracketsCount++
+      } else if (symbol === ')') {
+        bracketsCount--
+      }
+
+      if (bracketsCount < 0) {
+        return this.setState({
+          isValid: false,
+          answer: 'Неправильно расставлены скобки'
+        })
+      }
+    }
+
+    if (bracketsCount > 0) {
+      return this.setState({
+        isValid: false,
+        answer: 'Неодинаковое количество скобок'
+      })
+    }
+
+    this.setState({
+      isValid: true,
+      answer: 'ok'
+    })
   }
 
   handleButtonClick (e) {
@@ -28,17 +62,24 @@ class Calculator extends Component {
           console.log(prevState.expression)
           if (prevState.expression.length > 0) {
             prevState.expression = prevState.expression.slice(0, -1)
+            prevState.answer = ''
+            prevState.isValid = false
           }
         })
         break
 
       case 'C':
         console.log('C')
-        this.setState({expression: ''})
+        this.setState({
+          expression: '',
+          isValid: false,
+          answer: ''
+        })
         break
 
       case '=':
         console.log('=')
+        this.validateExpression()
         break
 
       default:
@@ -53,6 +94,28 @@ class Calculator extends Component {
   handleInputText (e) {
     this.setState((prevState) => {
       prevState.expression += e
+    })
+  }
+
+  testInput () {
+    let expression = '1+(23*65-(98/34+5*9))-(37/2)*6'
+    this.setState({
+      expression,
+      isValid: false,
+      answer: ''
+    }, () => {
+      this.validateExpression()
+    })
+  }
+
+  testInput2 () {
+    let expression = '1+(23*65-(98/34+5*9))-(37/2))*6'
+    this.setState({
+      expression,
+      isValid: false,
+      answer: ''
+    }, () => {
+      this.validateExpression()
     })
   }
 
@@ -81,6 +144,12 @@ class Calculator extends Component {
               <Well>
                 {this.state.answer}
               </Well>
+              <div style={{backgroundColor: 'green', width: '100px', height: '100px'}} onClick={this.testInput}>
+                Check
+              </div>
+              <div style={{backgroundColor: 'red', width: '100px', height: '100px'}} onClick={this.testInput2}>
+                Check
+              </div>
             </Col>
           </Row>
         </Grid>
