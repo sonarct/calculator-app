@@ -70,7 +70,8 @@ class Calculator extends Component {
   }
 
   testInput () {
-    let expression = '1+(23*65-(98/34+5*9))-(37/2)*6'
+    let expression = '1+(-23*65-(-98/34+5*9))-(37/2)*6'
+    // let expression = '-1.0321+1.4234-1.2421-0.21314+1+1-2'
     this.setState({
       expression,
       isValid: false,
@@ -81,7 +82,8 @@ class Calculator extends Component {
   }
 
   testInput2 () {
-    let expression = '1+(23*65-(98/34+5*9))-(37/2))*6'
+    // let expression = '1.0321+1.4234-1.2421-0.21314+1+1-2'
+    let expression = '3+2*4+(6-2)/3'
     this.setState({
       expression,
       isValid: false,

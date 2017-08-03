@@ -6,11 +6,11 @@ export default function calculate (expr) {
     }
   }
 
-  getExpression(expr)
+  let result = getExpression(expr)
 
   return {
     isValid: true,
-    answer: 'ok'
+    answer: result
   }
 }
 
@@ -40,83 +40,104 @@ function checkBrackets (expr) {
 
 function parseExpression (expr) {
   let e = expr
+  let flag = 'g'
   let pattern = [
     '(\\d+\\.?\\d*)',
     '',
-    '(\\d+\\.?\\d*)'
-  ]
-  let flag = 'g'
+    '(\\d+\\.?\\d*)']
   let ops = [
     {sign: '\\/', fn: div},
-    {sign: '\\*', fn: mul},
-    {sign: '\\-', fn: sub},
-    {sign: '\\+', fn: sum}]
-  let functions = []
+    {sign: '\\*', fn: mul}]
+
+  e = e.replace('--', '+')
+  e = e.replace('+-', '-')
+  e = e.replace('-+', '-')
 
   for (let o in ops) {
     pattern[1] = ops[o].sign
     let fn = ops[o].fn
     let regexp = new RegExp(pattern.join(''), flag)
-
-    console.log(regexp)
-
     let match
 
     while ((match = regexp.exec(e)) !== null) {
-      let x = fn(match[1], match[2])
+      let result = fn(match[1], match[2])
       console.log(match)
-      console.log(x)
-      console.log(e)
-      console.log(match.index)
+      console.log(e, ' = ', result)
       let i = match.index
       let l = match[0].length
-      let b = e.slice(0, i)
-      let a = e.slice(i + l)
-      console.log('b ', b)
-      console.log('a ', a)
-      e = [b, x, a].join('')
+      let left = e.slice(0, i)
+      let right = e.slice(i + l)
+      e = [left, result, right].join('')
+    }
+  }
+
+  let regexp = /(-?\d+\.?\d*)/g
+  let match = e.match(regexp)
+  console.log(match)
+  let numbers = match.slice()
+  let total = numbers.reduce((sum, val) => {
+    return parseFloat(sum) + parseFloat(val)
+  })
+  console.log(total)
+
+  return total
+}
+
+function getExpression (expr) {
+  if (!(/[()]/g.test(expr))) {
+    let result = parseExpression(expr)
+    return result
+  }
+
+  let brs = findBrackets(expr)
+  let brl = brs[0]
+  let brr = brs[1]
+
+  let part = expr.slice(brl + 1, brr)
+  console.log(part)
+
+  if (checkExpression(part)) {
+    let result = parseExpression(part)
+    console.log(expr, result)
+
+    let left = expr.slice(0, brl)
+    let right = expr.slice(brr + 1)
+    let z = [left, result, right].join('')
+
+    let total = getExpression(z)
+    console.log(z)
+    return total
+  } else {
+    return {
+      isValid: false,
+      answer: 'Problem with evaluating'
     }
   }
 }
 
-function getExpression (expr) {
-  let brs = []
-  brs[1] = expr.indexOf(')')
-  for (let i = brs[1]; i >= 0; i--) {
+function findBrackets (expr) {
+  let l
+  let r
+
+  r = expr.indexOf(')')
+  for (let i = r; i >= 0; i--) {
     if (expr[i] === '(') {
-      brs[0] = i
+      l = i
       break
     }
   }
-  console.log(brs[0], brs[1])
-  if (brs[1] === -1 && !brs[0]) {
-    brs[0] = -1
-    brs[1] = expr.length
-  }
-  console.log(brs[0], brs[1])
 
-  let part = expr.slice(brs[0] + 1, brs[1])
-  console.log(part)
-  if (checkExpression(part)) {
-    parseExpression(part)
-  } else {
-    console.log('ne valid')
+  if (r === -1 && !l) {
+    l = -1
+    r = expr.length
   }
+
+  return [l, r]
 }
 
 function checkExpression (expr) {
   let isValid = (/^-?\d+\.?\d*([*/+-]\d+\.?\d*)*$/g.test(expr))
-  console.log(expr)
-  console.log('valid ', isValid)
   return isValid
-}
-
-function sum (a, b) {
-  return parseFloat(a) + parseFloat(b)
-}
-
-function sub (a, b) {
-  return parseFloat(a) - parseFloat(b)
 }
 
 function mul (a, b) {
