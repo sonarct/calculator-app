@@ -16,10 +16,38 @@ class Calculator extends Component {
     }
   }
 
+  validateExpression () {
+
+  }
+
   handleButtonClick (e) {
-    this.setState((prevState) => {
-      prevState.expression += e
-    })
+    switch (e) {
+      case 'D':
+        console.log('D')
+        this.setState((prevState) => {
+          console.log(prevState.expression)
+          if (prevState.expression.length > 0) {
+            prevState.expression = prevState.expression.slice(0, -1)
+          }
+        })
+        break
+
+      case 'C':
+        console.log('C')
+        this.setState({expression: ''})
+        break
+
+      case '=':
+        console.log('=')
+        break
+
+      default:
+        console.log('num')
+        this.setState((prevState) => {
+          prevState.expression += e
+        })
+        break
+    }
   }
 
   handleInputText (e) {
