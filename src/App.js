@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
+import Calculator from './Calculator'
 
 class App extends Component {
   render () {
     return (
       <div>
-        My app
+        <Calculator />
       </div>
     )
   }
