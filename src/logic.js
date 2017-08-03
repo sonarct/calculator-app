@@ -40,23 +40,42 @@ function checkBrackets (expr) {
 
 function parseExpression (expr) {
   let e = expr
-  let regexp = /(\d+\.?\d*)\/(\d+\.?\d*)/g
-  let match
+  let pattern = [
+    '(\\d+\\.?\\d*)',
+    '',
+    '(\\d+\\.?\\d*)'
+  ]
+  let flag = 'g'
+  let ops = [
+    {sign: '\\/', fn: div},
+    {sign: '\\*', fn: mul},
+    {sign: '\\-', fn: sub},
+    {sign: '\\+', fn: sum}]
+  let functions = []
 
-  while ((match = regexp.exec(e)) !== null) {
-    let x = match[1] / match[2]
-    console.log(match)
-    console.log(x)
-    console.log(e)
-    console.log(match.index)
-    let i = match.index
-    let l = match[0].length
-    let b = e.slice(0, i)
-    let a = e.slice(i + l)
-    console.log('b ', b)
-    console.log('a ', a)
-    let z = [b, x, a].join('')
-    console.log('z ', z)
+  for (let o in ops) {
+    pattern[1] = ops[o].sign
+    let fn = ops[o].fn
+    let regexp = new RegExp(pattern.join(''), flag)
+
+    console.log(regexp)
+
+    let match
+
+    while ((match = regexp.exec(e)) !== null) {
+      let x = fn(match[1], match[2])
+      console.log(match)
+      console.log(x)
+      console.log(e)
+      console.log(match.index)
+      let i = match.index
+      let l = match[0].length
+      let b = e.slice(0, i)
+      let a = e.slice(i + l)
+      console.log('b ', b)
+      console.log('a ', a)
+      e = [b, x, a].join('')
+    }
   }
 }
 
@@ -90,4 +109,20 @@ function checkExpression (expr) {
   console.log(expr)
   console.log('valid ', isValid)
   return isValid
+}
+
+function sum (a, b) {
+  return parseFloat(a) + parseFloat(b)
+}
+
+function sub (a, b) {
+  return parseFloat(a) - parseFloat(b)
+}
+
+function mul (a, b) {
+  return parseFloat(a) * parseFloat(b)
+}
+
+function div (a, b) {
+  return parseFloat(a) / parseFloat(b)
 }
