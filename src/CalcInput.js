@@ -1,15 +1,11 @@
 import React, {Component} from 'react'
 import {FormGroup, FormControl, HelpBlock} from 'react-bootstrap'
 
-class InputExpression extends Component {
+class CalcInput extends Component {
   constructor (props) {
     super(props)
 
     this.handleChange = this.handleChange.bind(this)
-
-    this.state = {
-      value: ''
-    }
   }
 
   getValidationState () {
@@ -17,8 +13,8 @@ class InputExpression extends Component {
   }
 
   handleChange (e) {
-    const value = e.target.value
-    this.setState({ value }, () => { })
+    const value = e.target.value.slice(-1)
+    this.props.onChange(value)
   }
 
   render () {
@@ -30,7 +26,7 @@ class InputExpression extends Component {
         >
           <FormControl
             type='text'
-            value={this.state.value}
+            value={this.props.expression}
             placeholder='Enter expression'
             onChange={this.handleChange}
           />
@@ -42,4 +38,4 @@ class InputExpression extends Component {
   }
 }
 
-export default InputExpression
+export default CalcInput
