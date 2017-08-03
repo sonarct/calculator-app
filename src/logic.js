@@ -6,19 +6,7 @@ export default function calculate (expr) {
     }
   }
 
-  // Parse expression
-  let brs = []
-  brs[1] = expr.indexOf(')')
-  for (let i = brs[1]; i >= 0; i--) {
-    if (expr[i] === '(') {
-      brs[0] = i
-      break
-    }
-  }
-  console.log(brs[0], brs[1])
-
-  let part = expr.slice(brs[0] + 1, brs[1])
-  console.log(part)
+  getExpression(expr)
 
   return {
     isValid: true,
@@ -48,4 +36,33 @@ function checkBrackets (expr) {
   } else {
     return true
   }
+}
+
+function parseExpression (expr) {
+  console.log(expr)
+}
+
+function getExpression (expr) {
+  let brs = []
+  brs[1] = expr.indexOf(')')
+  for (let i = brs[1]; i >= 0; i--) {
+    if (expr[i] === '(') {
+      brs[0] = i
+      break
+    }
+  }
+  console.log(brs[0], brs[1])
+
+  let part = expr.slice(brs[0] + 1, brs[1])
+  if (checkExpression(part)) {
+    parseExpression(part)
+  } else {
+    console.log('ne valid')
+  }
+}
+
+function checkExpression (expr) {
+  let isValid = (/^-?\d+([*/+-]\d+)*$/g.test(expr))
+  console.log('valid ', isValid)
+  return isValid
 }
