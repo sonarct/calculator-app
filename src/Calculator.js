@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Grid, Row, Col, Well} from 'react-bootstrap'
 import CalcInput from './CalcInput'
 import CalcButtonList from './CalcButtonList'
-import calculate from './logic'
+import evaluate from './logic'
 
 class Calculator extends Component {
   constructor (props) {
@@ -15,15 +15,15 @@ class Calculator extends Component {
 
     this.state = {
       expression: '',
-      answer: '',
-      isValid: false
+      answer: ''
     }
   }
 
   validateExpression () {
     const expr = this.state.expression.toString()
-    let result = calculate(expr)
-    this.setState({...result})
+    let result = evaluate(expr)
+    this.setState({answer: result})
+    console.log(typeof this.state.answer)
   }
 
   handleButtonClick (e) {
@@ -35,7 +35,6 @@ class Calculator extends Component {
           if (prevState.expression.length > 0) {
             prevState.expression = prevState.expression.slice(0, -1)
             prevState.answer = ''
-            prevState.isValid = false
           }
         })
         break
@@ -44,7 +43,6 @@ class Calculator extends Component {
         console.log('C')
         this.setState({
           expression: '',
-          isValid: false,
           answer: ''
         })
         break
@@ -70,11 +68,10 @@ class Calculator extends Component {
   }
 
   testInput () {
-    let expression = '1+(-23*65-(-98/34+5*9))-(37/2)*6'
+    let expression = '1+(-23*65/12/2/3-(-98/34+5*9))-(37/2)*6'
     // let expression = '-1.0321+1.4234-1.2421-0.21314+1+1-2'
     this.setState({
       expression,
-      isValid: false,
       answer: ''
     }, () => {
       this.validateExpression()
@@ -86,7 +83,6 @@ class Calculator extends Component {
     let expression = '3+2*4+(6-2)/3'
     this.setState({
       expression,
-      isValid: false,
       answer: ''
     }, () => {
       this.validateExpression()

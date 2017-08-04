@@ -1,17 +1,11 @@
-export default function calculate (expr) {
+export default function evaluate (expr) {
   if (!checkBrackets(expr)) {
-    return {
-      isValid: false,
-      answer: 'problem with brackets'
-    }
+    return 'Error. Problem with brackets'
   }
 
   let result = getExpression(expr)
 
-  return {
-    isValid: true,
-    answer: result
-  }
+  return result
 }
 
 function checkBrackets (expr) {
@@ -40,23 +34,18 @@ function checkBrackets (expr) {
 
 function parseExpression (expr) {
   let e = expr
-  let flag = 'g'
   let pattern = [
     '(\\d+\\.?\\d*)',
     '',
-    '(\\d+\\.?\\d*)']
+    '(-?\\d+\\.?\\d*)']
   let ops = [
     {sign: '\\/', fn: div},
     {sign: '\\*', fn: mul}]
 
-  e = e.replace('--', '+')
-  e = e.replace('+-', '-')
-  e = e.replace('-+', '-')
-
   for (let o in ops) {
     pattern[1] = ops[o].sign
     let fn = ops[o].fn
-    let regexp = new RegExp(pattern.join(''), flag)
+    let regexp = new RegExp(pattern.join(''))
     let match
 
     while ((match = regexp.exec(e)) !== null) {
@@ -68,6 +57,10 @@ function parseExpression (expr) {
       let left = e.slice(0, i)
       let right = e.slice(i + l)
       e = [left, result, right].join('')
+
+      e = e.replace('--', '+')
+      e = e.replace('+-', '-')
+      e = e.replace('-+', '-')
     }
   }
 
@@ -108,10 +101,7 @@ function getExpression (expr) {
     console.log(z)
     return total
   } else {
-    return {
-      isValid: false,
-      answer: 'Problem with evaluating'
-    }
+    return 'Error. Expression is incorrect'
   }
 }
 
