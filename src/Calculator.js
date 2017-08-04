@@ -32,7 +32,8 @@ class Calculator extends Component {
   }
 
   handleChange (e) {
-    const value = e.target ? e.target.value : e
+    let value = e.target ? e.target.value : e
+    value = value.replace(/ /g, '')
     this.setState({value}, () => {
       this.evaluateExpression()
     })
