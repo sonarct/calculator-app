@@ -1,133 +1,136 @@
 import React, {Component} from 'react'
-import {Grid, Row, Col, Well} from 'react-bootstrap'
-import CalcInput from './CalcInput'
+import {FormControl, ControlLabel, Grid, Row, Col} from 'react-bootstrap'
 import CalcButtonList from './CalcButtonList'
 import evaluate from './logic'
+import './styles.css'
 
 class Calculator extends Component {
   constructor (props) {
     super(props)
 
+    this.handleChange = this.handleChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
     this.handleButtonClick = this.handleButtonClick.bind(this)
-    this.handleInputText = this.handleInputText.bind(this)
-    this.testInput = this.testInput.bind(this)
-    this.testInput2 = this.testInput2.bind(this)
 
     this.state = {
-      expression: '',
+      value: '',
       answer: ''
     }
   }
 
-  validateExpression () {
-    const expr = this.state.expression.toString()
-    let result = evaluate(expr)
-    this.setState({answer: result})
-    console.log(typeof this.state.answer)
+  getValidationState () {
+    if (this.props.error) {
+      return 'error'
+    } else {
+      return 'success'
+    }
+  }
+
+  onSubmit (e) {
+    e.preventDefault()
+    this.evaluateExpression()
+  }
+
+  handleChange (e) {
+    const value = e.target ? e.target.value : e
+    console.log('vot takoe ', value)
+    this.setState({value}, () => {
+      this.evaluateExpression()
+    })
   }
 
   handleButtonClick (e) {
+    let value = this.state.value
+
     switch (e) {
       case 'D':
         console.log('D')
-        this.setState((prevState) => {
-          console.log(prevState.expression)
-          if (prevState.expression.length > 0) {
-            prevState.expression = prevState.expression.slice(0, -1)
-            prevState.answer = ''
-          }
+
+        if (value && value.length > 0) {
+          value = value.slice(0, value.length - 1)
+        } else {
+          value = ''
+        }
+
+        this.setState({
+          value,
+          answer: ''
         })
         break
 
       case 'C':
         console.log('C')
         this.setState({
-          expression: '',
+          value: '',
           answer: ''
         })
         break
 
       case '=':
         console.log('=')
-        this.validateExpression()
+        this.evaluateExpression()
         break
 
       default:
-        console.log('num')
-        this.setState((prevState) => {
-          prevState.expression += e
-        })
+        console.log('num ', e)
+        value = [value, e].join('')
+        this.handleChange(value)
         break
     }
   }
 
-  handleInputText (e) {
-    this.setState((prevState) => {
-      prevState.expression += e
-    })
-  }
-
-  testInput () {
-    let expression = '1+(-23*65/12/2/3-(-98/34+5*9))-(37/2)*6'
-    // let expression = '-1.0321+1.4234-1.2421-0.21314+1+1-2'
-    this.setState({
-      expression,
-      answer: ''
-    }, () => {
-      this.validateExpression()
-    })
-  }
-
-  testInput2 () {
-    // let expression = '1.0321+1.4234-1.2421-0.21314+1+1-2'
-    let expression = '3+2*4+(6-2)/3'
-    this.setState({
-      expression,
-      answer: ''
-    }, () => {
-      this.validateExpression()
-    })
+  evaluateExpression () {
+    const expr = this.state.value.toString()
+    if (!expr) {
+      this.setState({answer: ''})
+      return
+    }
+    let result = evaluate(expr)
+    this.setState({answer: result})
+    console.log(typeof this.state.answer)
   }
 
   render () {
     return (
-      <div>
-        <Grid>
-          <Row>
-            <Col xs={12} md={8} mdOffset={2}>
-              <h3>
-                Calc App
-              </h3>
-
-              <CalcInput
-                expression={this.state.expression}
-                onChange={this.handleInputText}
-                error={typeof this.state.answer === 'string' && this.state.answer.match(/^Error/) ? this.state.answer : ''} />
-
-            </Col>
-          </Row>
-          <Row>
-            <Col lg={8} md={8} mdOffset={2}>
-
+      <Grid>
+        <Row>
+          <Col xs={12} md={8} mdOffset={2}>
+            <h3>Calculator App</h3>
+            <Row className='calc-input-row'>
+              <Col xs={8} md={8}>
+                <form onSubmit={this.onSubmit}>
+                  <ControlLabel>
+                    Input your expression
+                  </ControlLabel>
+                  <FormControl
+                    type='text'
+                    value={this.state.value}
+                    placeholder='Enter expression'
+                    onChange={this.handleChange}
+                    className='calc-input'
+                    autoFocus
+                  />
+                </form>
+              </Col>
+              <Col xs={4} md={4}>
+                <ControlLabel>
+                  Result
+                </ControlLabel>
+                <FormControl
+                  componentClass='textarea'
+                  type='text'
+                  value={this.state.answer}
+                  placeholder='Result'
+                  className='calc-input'
+                />
+              </Col>
+            </Row>
+            <Row className='calc-btn-block'>
               <CalcButtonList onClick={this.handleButtonClick} />
-
-            </Col>
-          </Row>
-          <Row>
-            <Col lg={8} md={8} mdOffset={2}>
-              <Well>
-                {this.state.answer}
-              </Well>
-              <div style={{backgroundColor: 'green', width: '100px', height: '100px'}} onClick={this.testInput}>
-                Check
-              </div>
-              <div style={{backgroundColor: 'red', width: '100px', height: '100px'}} onClick={this.testInput2}>
-                Check
-              </div>
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+            </Row>
+          </Col>
+        </Row>
+      </Grid>
     )
   }
 }

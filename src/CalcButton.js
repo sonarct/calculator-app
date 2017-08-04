@@ -1,22 +1,15 @@
 import React, {Component} from 'react'
-import {Button} from 'react-bootstrap'
 
 class CalcButton extends Component {
-  constructor (props) {
-    super(props)
-
-    this.handleClick = this.handleClick.bind(this)
-  }
-
-  handleClick () {
+  handleClick = () => {
     this.props.onClick(this.props.value)
   }
 
   render () {
     return (
-      <Button onClick={this.handleClick} style={{height: '50px', width: '33%'}}>
+      <div onClick={this.handleClick} className='calc-btn'>
         {this.props.value}
-      </Button>
+      </div>
     )
   }
 }

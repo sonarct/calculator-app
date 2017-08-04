@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './src/App'
+import Calculator from './src/Calculator'
 
 const root = document.querySelector('#app')
-ReactDOM.render(<App />, root)
+ReactDOM.render(<Calculator />, root)

@@ -1,17 +1,16 @@
 import React, {Component} from 'react'
-import {ButtonGroup, Col} from 'react-bootstrap'
 import CalcButton from './CalcButton'
+import {Col, Row} from 'react-bootstrap'
 
 class CalcButtonList extends Component {
   render () {
     const values = [
-      [1, 2, 3],
-      [4, 5, 6],
-      [7, 8, 9],
-      ['D', 0, 'C'],
-      ['+', '-', '('],
-      ['*', '/', ')'],
-      ['=', '.']
+      [1, 2, 3, '+'],
+      [4, 5, 6, '-'],
+      [7, 8, 9, '*'],
+      ['D', 0, '.', '/'],
+      ['(', ')'],
+      ['C', '=']
     ]
 
     let i = 0
@@ -25,21 +24,24 @@ class CalcButtonList extends Component {
       })
 
       return (
-        <ButtonGroup key={j++} justified >
+        <div key={j++} className='calc-btn-group' >
           {buttons}
-        </ButtonGroup>
+        </div>
       )
     })
 
     return (
       <div>
-        {groups[0]}
-        {groups[1]}
-        {groups[2]}
-        {groups[3]}
-        {groups[4]}
-        {groups[5]}
-        {groups[6]}
+        <Col xs={8} md={8}>
+          {groups[0]}
+          {groups[1]}
+          {groups[2]}
+          {groups[3]}
+        </Col>
+        <Col xs={4} md={4} className='calc-operations-block'>
+          {groups[4]}
+          {groups[5]}
+        </Col>
       </ div>
     )
   }

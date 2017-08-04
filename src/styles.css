@@ -1,0 +1,46 @@
+.calc-btn {
+  width: 24%;
+  height: 100px;
+  font-size: 3em;
+  text-align: center;
+  background-color: #f2f2f2;
+  color: #6d6d6d;
+  padding-top: 0.5em;
+  border-radius: 10px;
+}
+
+.calc-btn:hover {
+  background-color: #e8e9ea;
+  cursor: pointer;
+}
+
+.calc-btn:active {
+  background-color: #d6d6d6;
+}
+
+.calc-btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.calc-btn-block {
+  margin-top: 40px;
+}
+
+.calc-operations-block .calc-btn {
+  width: 48%;
+}
+
+.calc-input-row {
+  margin-top: 24px;
+}
+
+.calc-input {
+  letter-spacing: 1px;
+  font-size: 1.5em;
+}
+
+h3 {
+  margin-top: 40px;
+}

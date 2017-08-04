@@ -50,6 +50,9 @@ function parseExpression (expr) {
 
     while ((match = regexp.exec(e)) !== null) {
       let result = fn(match[1], match[2])
+      if (result === Infinity) {
+        return Infinity
+      }
       console.log(match)
       console.log(e, ' = ', result)
       let i = match.index
@@ -100,9 +103,10 @@ function getExpression (expr) {
     let left = expr.slice(0, brl)
     let right = expr.slice(brr + 1)
     let z = [left, result, right].join('')
+    let e = normalize(z)
 
     console.log('Step__________ ', z)
-    let total = getExpression(z)
+    let total = getExpression(e)
     return total
   } else {
     return 'Error. Expression is incorrect'
