@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {FormGroup, FormControl, HelpBlock} from 'react-bootstrap'
+import {FormGroup, FormControl, HelpBlock, ControlLabel} from 'react-bootstrap'
 
 class CalcInput extends Component {
   constructor (props) {
@@ -9,7 +9,11 @@ class CalcInput extends Component {
   }
 
   getValidationState () {
-    return 'success'
+    if (this.props.error) {
+      return 'error'
+    } else {
+      return 'success'
+    }
   }
 
   handleChange (e) {
@@ -24,6 +28,9 @@ class CalcInput extends Component {
           controlId='formBasicText'
           validationState={this.getValidationState()}
         >
+          <ControlLabel>
+            Input your expression
+          </ControlLabel>
           <FormControl
             type='text'
             value={this.props.expression}
@@ -31,7 +38,9 @@ class CalcInput extends Component {
             onChange={this.handleChange}
           />
           <FormControl.Feedback />
-          <HelpBlock>Validation is based on string length.</HelpBlock>
+          <HelpBlock>
+            {this.props.error}
+          </HelpBlock>
         </FormGroup>
       </div>
     )

@@ -58,9 +58,7 @@ function parseExpression (expr) {
       let right = e.slice(i + l)
       e = [left, result, right].join('')
 
-      e = e.replace('--', '+')
-      e = e.replace('+-', '-')
-      e = e.replace('-+', '-')
+      e = normalize(e)
     }
   }
 
@@ -78,13 +76,19 @@ function parseExpression (expr) {
 
 function getExpression (expr) {
   if (!(/[()]/g.test(expr))) {
-    let result = parseExpression(expr)
-    return result
+    expr = normalize(expr)
+
+    if (checkExpression(expr)) {
+      let result = parseExpression(expr)
+      return result
+    } else {
+      return 'Error. Expression is incorrect'
+    }
   }
 
   let brs = findBrackets(expr)
-  let brl = brs[0]
-  let brr = brs[1]
+  let brl = brs.left
+  let brr = brs.right
 
   let part = expr.slice(brl + 1, brr)
   console.log(part)
@@ -97,8 +101,8 @@ function getExpression (expr) {
     let right = expr.slice(brr + 1)
     let z = [left, result, right].join('')
 
+    console.log('Step__________ ', z)
     let total = getExpression(z)
-    console.log(z)
     return total
   } else {
     return 'Error. Expression is incorrect'
@@ -122,12 +126,11 @@ function findBrackets (expr) {
     r = expr.length
   }
 
-  return [l, r]
+  return {left: l, right: r}
 }
 
 function checkExpression (expr) {
-  let isValid = (/^-?\d+\.?\d*([*/+-]\d+\.?\d*)*$/g.test(expr))
-  return isValid
+  return (/^-?\d+\.?\d*(([*/+-]|\/\-|\*\-)\d+\.?\d*)*$/g.test(expr))
 }
 
 function mul (a, b) {
@@ -136,4 +139,11 @@ function mul (a, b) {
 
 function div (a, b) {
   return parseFloat(a) / parseFloat(b)
+}
+
+function normalize (e) {
+  e = e.replace('--', '+')
+  e = e.replace('+-', '-')
+  e = e.replace('-+', '-')
+  return e
 }

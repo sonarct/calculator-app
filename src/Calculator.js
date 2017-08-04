@@ -95,10 +95,14 @@ class Calculator extends Component {
         <Grid>
           <Row>
             <Col xs={12} md={8} mdOffset={2}>
+              <h3>
+                Calc App
+              </h3>
 
               <CalcInput
                 expression={this.state.expression}
-                onChange={this.handleInputText} />
+                onChange={this.handleInputText}
+                error={typeof this.state.answer === 'string' && this.state.answer.match(/^Error/) ? this.state.answer : ''} />
 
             </Col>
           </Row>
