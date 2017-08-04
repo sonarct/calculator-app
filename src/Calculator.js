@@ -33,7 +33,6 @@ class Calculator extends Component {
 
   handleChange (e) {
     const value = e.target ? e.target.value : e
-    console.log('vot takoe ', value)
     this.setState({value}, () => {
       this.evaluateExpression()
     })
@@ -44,7 +43,6 @@ class Calculator extends Component {
 
     switch (e) {
       case 'D':
-        console.log('D')
 
         if (value && value.length > 0) {
           value = value.slice(0, value.length - 1)
@@ -59,7 +57,6 @@ class Calculator extends Component {
         break
 
       case 'C':
-        console.log('C')
         this.setState({
           value: '',
           answer: ''
@@ -67,12 +64,10 @@ class Calculator extends Component {
         break
 
       case '=':
-        console.log('=')
         this.evaluateExpression()
         break
 
       default:
-        console.log('num ', e)
         value = [value, e].join('')
         this.handleChange(value)
         break
@@ -87,7 +82,6 @@ class Calculator extends Component {
     }
     let result = evaluate(expr)
     this.setState({answer: result})
-    console.log(typeof this.state.answer)
   }
 
   render () {

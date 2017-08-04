@@ -53,8 +53,6 @@ function parseExpression (expr) {
       if (result === Infinity) {
         return Infinity
       }
-      console.log(match)
-      console.log(e, ' = ', result)
       let i = match.index
       let l = match[0].length
       let left = e.slice(0, i)
@@ -67,12 +65,10 @@ function parseExpression (expr) {
 
   let regexp = /(-?\d+\.?\d*)/g
   let match = e.match(regexp)
-  console.log(match)
   let numbers = match.slice()
   let total = numbers.reduce((sum, val) => {
     return parseFloat(sum) + parseFloat(val)
   })
-  console.log(total)
 
   return total
 }
@@ -94,19 +90,16 @@ function getExpression (expr) {
   let brr = brs.right
 
   let part = expr.slice(brl + 1, brr)
-  console.log(part)
 
   if (checkExpression(part)) {
     let result = parseExpression(part)
-    console.log(expr, result)
 
     let left = expr.slice(0, brl)
     let right = expr.slice(brr + 1)
     let z = [left, result, right].join('')
     let e = normalize(z)
-
-    console.log('Step__________ ', z)
     let total = getExpression(e)
+
     return total
   } else {
     return 'Error. Expression is incorrect'

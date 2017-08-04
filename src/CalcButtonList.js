@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import CalcButton from './CalcButton'
-import {Col, Row} from 'react-bootstrap'
+import {Col} from 'react-bootstrap'
 
 class CalcButtonList extends Component {
   render () {
