@@ -51,9 +51,8 @@ class Calculator extends Component {
           value = ''
         }
 
-        this.setState({
-          value,
-          answer: ''
+        this.setState({value}, () => {
+          this.evaluateExpression()
         })
         break
 
